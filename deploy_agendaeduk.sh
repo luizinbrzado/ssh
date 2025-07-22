@@ -1,20 +1,20 @@
 #!/bin/bash
 
-# Configurações do projeto
+# === CONFIGURAÇÕES ===
 PROJECT_DIR="/var/www/agendaeduk"
-GIT_REPO="https://github.com/luizinbrzado/reserva-academica.git"
+GIT_REPO="https://github.com/seurepo/agendaeduk.git"  # altere se necessário
 DB_NAME="agendaeduk"
-DB_USER="admin"
-DB_PASS="@g3ndaEduk"
+DB_USER="agenda_user"
+DB_PASS="RHYpoR57tuCJyKST-p83Fg"
 APP_URL="https://agenda.unieduk.com.br"
 DOMAIN="agenda.unieduk.com.br"
 
 # === ATUALIZAÇÃO DO SISTEMA ===
 apt update && apt upgrade -y
 
-# === INSTALAR DEPENDÊNCIAS PHP/APACHE/MYSQL ===
+# === INSTALAR DEPENDÊNCIAS PHP/APACHE/MARIADB ===
 apt install -y apache2 php php-cli php-mbstring php-xml php-curl php-mysql php-sqlite3 php-bcmath php-zip libapache2-mod-php \
-    mysql-server git unzip curl composer
+    mariadb-server mariadb-client git unzip curl composer
 
 # === INSTALAR NODE.JS 18 ===
 curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
@@ -47,7 +47,7 @@ chmod -R 775 "$PROJECT_DIR/storage" "$PROJECT_DIR/bootstrap/cache"
 # === CRIAR BANCO DE DADOS ===
 mysql -u root <<MYSQL
 CREATE DATABASE IF NOT EXISTS $DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
+CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED WITH mysql_native_password BY '$DB_PASS';
 GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';
 FLUSH PRIVILEGES;
 MYSQL
@@ -55,7 +55,7 @@ MYSQL
 # === MIGRATIONS E SEEDS ===
 php artisan migrate --seed
 
-# === COMPILAR ASSETS (caso use Vite ou Mix) ===
+# === COMPILAR ASSETS ===
 npm install
 npm run build
 
@@ -86,7 +86,7 @@ a2enmod rewrite
 systemctl reload apache2
 
 # === ATIVAR HTTPS COM CERTBOT ===
-certbot --apache -d "$DOMAIN" --non-interactive --agree-tos -m ti.luizneves@unieduk.com.br
+certbot --apache -d "$DOMAIN" --non-interactive --agree-tos -m suporte@unieduk.com.br
 
 # === FINAL ===
 echo "✅ Deploy completo com HTTPS ativado!"
