@@ -2,10 +2,10 @@
 
 # === CONFIGURAÇÕES ===
 PROJECT_DIR="/var/www/agendaeduk"
-GIT_REPO="https://github.com/seurepo/agendaeduk.git"  # altere se necessário
+GIT_REPO="https://github.com/luizinbrzado/reserva-academica.git"
 DB_NAME="agendaeduk"
-DB_USER="agenda_user"
-DB_PASS="RHYpoR57tuCJyKST-p83Fg"
+DB_USER="admin"
+DB_PASS="@g3ndaEduk"
 APP_URL="https://agenda.unieduk.com.br"
 DOMAIN="agenda.unieduk.com.br"
 
